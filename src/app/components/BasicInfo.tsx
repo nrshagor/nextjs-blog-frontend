@@ -274,7 +274,10 @@ const BasicInfo = () => {
       <div>
         <p>Single image:</p>
         <Image
-          src={`${process.env.NEXT_PUBLIC_API_URL}/${formData.profilePictureUrl}`}
+          src={
+            `${process.env.NEXT_PUBLIC_API_URL}/${formData.profilePictureUrl} ` &&
+            `/`
+          }
           alt="Profile"
           width={100}
           height={100}
