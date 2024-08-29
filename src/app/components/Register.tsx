@@ -2,13 +2,13 @@
 import CustomModal from "@/app/components/CustomModal";
 import axios from "axios";
 import { setCookie } from "cookie-handler-pro";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const Register = () => {
   const router = useRouter();
   const [emailRegistration, setEmailRegistration] = useState(true);
-
   const [errors, setErrors] = useState("");
 
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ const Register = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    if (name == "password") {
+    if (name === "password") {
       if (formData.password.length < 5) {
         setErrors("Password must be at least 6 characters");
       } else {
@@ -56,7 +56,6 @@ const Register = () => {
       setCookie("user_id", user.id.toString());
       console.log("token", token);
 
-      // Set the token in cookies
       setCookie("token", token, {
         httpOnly: false,
         secure: process.env.NODE_ENV !== "development",
@@ -84,7 +83,6 @@ const Register = () => {
         role: "user", // Ensure role is passed correctly
       };
 
-      // Register the user
       const registerResponse = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/register`,
         payload,
@@ -97,7 +95,6 @@ const Register = () => {
 
       console.log("Registration successful:", registerResponse.data);
 
-      // Try to login after registration
       await handleLogin();
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -117,40 +114,88 @@ const Register = () => {
     }
   };
 
-  console.log(formData); // Log form data to check input values
   return (
-    <div>
-      <div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-4">Register</h2>
         <form onSubmit={handleRegister}>
-          <input
-            type="text"
-            name="name"
-            placeholder="First Name"
-            onChange={handleInputChange}
-          />
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="name"
+            >
+              Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              placeholder="First Name"
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+            />
+          </div>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleInputChange}
-          />
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+            />
+          </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleInputChange}
-          />
-          {errors && <p style={{ color: "red" }}>{errors}</p>}
-          <input
-            type="password"
-            name="password_confirmation"
-            placeholder="Confirm Password"
-            onChange={handleInputChange}
-          />
-          <button type="submit">Sign Up</button>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+            />
+            {errors && <p className="text-red-500 text-sm mt-2">{errors}</p>}
+          </div>
+
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password_confirmation"
+            >
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              name="password_confirmation"
+              placeholder="Confirm Password"
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+          >
+            Sign Up
+          </button>
         </form>
+        <div className="mt-4 text-center">
+          <Link href="/login" className="text-blue-500 hover:underline">
+            Already have an account? Login
+          </Link>
+        </div>
       </div>
     </div>
   );
