@@ -48,6 +48,7 @@ const BlogPostView: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [lastPage, setLastPage] = useState<number>(1);
   const token = getCookie("token");
+  const user_id = Number(getCookie("user_id"));
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -111,12 +112,13 @@ const BlogPostView: React.FC = () => {
           <p>{post.body}</p>
           <small>by {post.user.name}</small>
           <button onClick={() => handleView(post.id)}>View</button>
-          {token && (
+          {post.user.id === user_id && (
             <div>
               <button onClick={() => handleEdit(post.id)}>Edit</button>
               <button
                 onClick={() => handleDelete(post.id)}
-                style={{ color: "red" }}>
+                style={{ color: "red" }}
+              >
                 Delete
               </button>
             </div>

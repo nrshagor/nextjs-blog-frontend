@@ -157,7 +157,8 @@ const Page = ({ params }: { params: { id: number } }) => {
                       onClick={() => {
                         setEditCommentId(comment.id);
                         setEditCommentBody(comment.body);
-                      }}>
+                      }}
+                    >
                       Edit
                     </button>
                     <button onClick={() => handleCommentDelete(comment.id)}>
