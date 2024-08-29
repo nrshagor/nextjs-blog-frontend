@@ -3,10 +3,6 @@ import axios from "axios";
 import { getCookie } from "cookie-handler-pro";
 import React, { useState, useEffect } from "react";
 
-interface BlogPostProps {
-  postId: number;
-}
-
 const Page = ({ params }: { params: { id: number } }) => {
   const [formData, setFormData] = useState({
     title: "",

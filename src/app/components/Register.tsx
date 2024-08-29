@@ -51,8 +51,9 @@ const Register = () => {
       );
 
       console.log("Login response:", loginResponse.data);
-
-      const token = loginResponse.data.token;
+      const { user, token } = loginResponse.data;
+      setCookie("token", token);
+      setCookie("user_id", user.id.toString());
       console.log("token", token);
 
       // Set the token in cookies

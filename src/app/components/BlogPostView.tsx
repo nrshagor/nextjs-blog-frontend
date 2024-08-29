@@ -78,6 +78,10 @@ const BlogPostView: React.FC = () => {
     const editUrl = `/blog/${postId}`; // You can replace this with your actual edit page route
     window.location.href = editUrl;
   };
+  const handleView = (postId: number) => {
+    const editUrl = `/blog/view/${postId}`; // You can replace this with your actual edit page route
+    window.location.href = editUrl;
+  };
 
   const handleDelete = async (postId: number) => {
     const token = getCookie("token");
@@ -106,7 +110,7 @@ const BlogPostView: React.FC = () => {
           <h2>{post.title}</h2>
           <p>{post.body}</p>
           <small>by {post.user.name}</small>
-
+          <button onClick={() => handleView(post.id)}>View</button>
           {token && (
             <div>
               <button onClick={() => handleEdit(post.id)}>Edit</button>
