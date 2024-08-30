@@ -3,36 +3,57 @@ import axios from "axios";
 import { getCookie } from "cookie-handler-pro";
 import React, { useState } from "react";
 import { Input, Button, Textarea } from "@nextui-org/react";
+import Toast from "./Toast"; // Import the Toast component
 
-const BlogPost = () => {
-  const [formData, setFormData] = useState({
+interface FormData {
+  title: string;
+  body: string;
+  thumbnail: File | null; // Allow both File and null
+}
+
+const BlogPost: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     body: "",
+    thumbnail: null, // Initialize with null
   });
   const [errors, setErrors] = useState("");
+  const [toastVisible, setToastVisible] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFormData({ ...formData, thumbnail: e.target.files[0] });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const payload = {
-        title: formData.title,
-        body: formData.body,
-      };
+      const payload = new FormData();
+      payload.append("title", formData.title);
+      payload.append("body", formData.body);
+      if (formData.thumbnail) {
+        payload.append("thumbnail", formData.thumbnail);
+      }
+
       const url = `${process.env.NEXT_PUBLIC_API_URL}/api/posts`;
       const token = getCookie("token");
 
-      // post blog
       await axios.post(url, payload, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
+
+      // Show success toast and clear form
+      setToastVisible(true);
+      setFormData({ title: "", body: "", thumbnail: null });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setErrors("The body field is required.");
@@ -50,6 +71,7 @@ const BlogPost = () => {
             value={formData.title}
             onChange={handleInputChange}
             className="w-full"
+            placeholder="Title"
           />
           {errors && <p className="text-red-500 text-sm mt-2">{errors}</p>}
 
@@ -58,14 +80,27 @@ const BlogPost = () => {
             value={formData.body}
             onChange={handleInputChange}
             className="w-full"
+            placeholder="Body"
           />
           {errors && <p className="text-red-500 text-sm mt-2">{errors}</p>}
+
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="w-full"
+          />
 
           <Button color="secondary" type="submit" className="w-full">
             Submit
           </Button>
         </form>
       </div>
+      <Toast
+        message="Blog post successfully submitted!"
+        show={toastVisible}
+        onClose={() => setToastVisible(false)}
+      />
     </div>
   );
 };
