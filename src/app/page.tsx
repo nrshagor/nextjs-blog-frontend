@@ -8,7 +8,6 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1>hello next</h1>
       <Button>Click me</Button>
-      <BlogPost />
 
       <BlogPostView />
     </main>

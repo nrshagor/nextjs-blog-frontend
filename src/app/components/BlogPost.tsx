@@ -2,6 +2,7 @@
 import axios from "axios";
 import { getCookie } from "cookie-handler-pro";
 import React, { useState } from "react";
+import { Input, Button, Textarea } from "@nextui-org/react";
 
 const BlogPost = () => {
   const [formData, setFormData] = useState({
@@ -9,10 +10,12 @@ const BlogPost = () => {
     body: "",
   });
   const [errors, setErrors] = useState("");
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -24,7 +27,7 @@ const BlogPost = () => {
       const token = getCookie("token");
 
       // post blog
-      const response = await axios.post(url, payload, {
+      await axios.post(url, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -36,28 +39,33 @@ const BlogPost = () => {
       }
     }
   };
+
   return (
-    <div>
-      <h1>Write a Blog</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="title"
-          value={formData.title}
-          placeholder="title"
-          onChange={handleInputChange}
-        />
-        {errors && <p style={{ color: "red" }}>{errors}</p>}
-        <input
-          type="text"
-          name="body"
-          value={formData.body}
-          placeholder="body"
-          onChange={handleInputChange}
-        />
-        {errors && <p style={{ color: "red" }}>{errors}</p>}
-        <button type="submit">Submit</button>
-      </form>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-5">
+      <div className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold mb-6 text-center">Write a Blog</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            name="title"
+            value={formData.title}
+            onChange={handleInputChange}
+            className="w-full"
+          />
+          {errors && <p className="text-red-500 text-sm mt-2">{errors}</p>}
+
+          <Textarea
+            name="body"
+            value={formData.body}
+            onChange={handleInputChange}
+            className="w-full"
+          />
+          {errors && <p className="text-red-500 text-sm mt-2">{errors}</p>}
+
+          <Button color="secondary" type="submit" className="w-full">
+            Submit
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };
