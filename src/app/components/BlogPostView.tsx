@@ -25,6 +25,7 @@ interface Post {
   id: number;
   title: string;
   body: string;
+  thumbnail: string; // Ensure the Post interface includes the thumbnail field
   created_at: string;
   updated_at: string;
   user: User;
@@ -97,7 +98,12 @@ const BlogPostView: React.FC = () => {
       );
     } catch (error) {
       console.error("Failed to delete the post:", error);
+      alert("Failed to delete the post. Please try again.");
     }
+  };
+
+  const truncateText = (text: string, limit: number) => {
+    return text.length > limit ? text.substring(0, limit) + "..." : text;
   };
 
   return (
@@ -105,12 +111,7 @@ const BlogPostView: React.FC = () => {
       <h1>Blog Posts</h1>
       <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
         {blogPosts.map((post) => (
-          <Card
-            shadow="sm"
-            key={post.id}
-            isPressable
-            onPress={() => handleView(post.id)}
-          >
+          <Card shadow="sm" key={post.id} isPressable>
             <CardBody className="overflow-visible p-0">
               <Image
                 shadow="sm"
@@ -118,25 +119,38 @@ const BlogPostView: React.FC = () => {
                 width="100%"
                 alt={post.title}
                 className="w-full object-cover h-[140px]"
-                src={post.user.email_verified_at || "/default-image.jpg"}
+                src={post.thumbnail || "/default-image.jpg"} // Use the correct thumbnail URL
               />
+              <CardBody>
+                <b>{post.title}</b>
+                <p className="text-default-500">
+                  {new Date(post.created_at).toLocaleDateString()}
+                </p>
+                <p className="text-default-500">
+                  {truncateText(post.body, 100)}
+                </p>
+              </CardBody>
             </CardBody>
             <CardFooter className="text-small justify-between">
-              <b>{post.title}</b>
-              <p className="text-default-500">
-                {new Date(post.created_at).toLocaleDateString()}
-              </p>
-              {post.user.id === user_id && (
-                <div>
-                  <button onClick={() => handleEdit(post.id)}>Edit</button>
-                  <button
-                    onClick={() => handleDelete(post.id)}
-                    style={{ color: "red" }}
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
+              <div className="flex justify-between items-center mt-2">
+                <Button onClick={() => handleView(post.id)} size="sm">
+                  View
+                </Button>
+                {post.user.id === user_id && (
+                  <div className="flex space-x-2">
+                    <Button
+                      onClick={() => handleEdit(post.id)}
+                      size="sm"
+                      color="primary"
+                    >
+                      Edit
+                    </Button>
+                    <Button onClick={() => handleDelete(post.id)} size="sm">
+                      Delete
+                    </Button>
+                  </div>
+                )}
+              </div>
             </CardFooter>
           </Card>
         ))}

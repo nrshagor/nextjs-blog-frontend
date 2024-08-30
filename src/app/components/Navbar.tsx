@@ -7,7 +7,6 @@ import {
   NavbarMenuItem,
   NavbarContent,
   NavbarItem,
-  Link,
   Button,
 } from "@nextui-org/react";
 import React, { useEffect } from "react";
@@ -15,6 +14,7 @@ import "../style/navbar.scss";
 import LogoutButton from "./LogoutButton";
 import { usePathname } from "next/navigation";
 import { getCookie } from "cookie-handler-pro";
+import Link from "next/link";
 
 const Navbars = () => {
   const token = getCookie("token");
@@ -97,7 +97,6 @@ const Navbars = () => {
                 className="w-full"
                 color={item.name === "Dashboard" ? "warning" : "foreground"}
                 href={item.path}
-                size="lg"
               >
                 {item.name}
               </Link>
@@ -106,12 +105,12 @@ const Navbars = () => {
           {!token && (
             <>
               <NavbarMenuItem>
-                <Link className="w-full" href="/login" size="lg">
+                <Link className="w-full" href="/login">
                   Login
                 </Link>
               </NavbarMenuItem>
               <NavbarMenuItem>
-                <Link className="w-full" href="/register" size="lg">
+                <Link className="w-full" href="/register">
                   Sign Up
                 </Link>
               </NavbarMenuItem>
@@ -119,7 +118,7 @@ const Navbars = () => {
           )}
           {token && (
             <NavbarMenuItem>
-              <Link className="w-full" href="#" size="lg">
+              <Link className="w-full" href="#">
                 <LogoutButton />
               </Link>
             </NavbarMenuItem>
