@@ -9,6 +9,7 @@ const Page = ({ params }: { params: { id: number } }) => {
     title: "",
     body: "",
     thumbnail: "",
+    user_id: null, // Added user_id to track the post owner
   });
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -24,7 +25,8 @@ const Page = ({ params }: { params: { id: number } }) => {
         setData({
           title: response.data.title,
           body: response.data.body,
-          thumbnail: response.data.thumbnail, // Add thumbnail URL here
+          thumbnail: response.data.thumbnail,
+          user_id: response.data.user.id, // Save post owner's user_id
         });
 
         const commentsUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${params.id}/comments`;
@@ -128,21 +130,21 @@ const Page = ({ params }: { params: { id: number } }) => {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <Card>
+      <Card className="flex justify-center items-center gap-8 px-4 py-4">
         {/* Add Image at the top of the blog post */}
         <Image
           src={data.thumbnail}
           alt={data.title}
           className="w-full object-cover h-[300px] rounded-t-lg"
-          width="100%"
+          width="50%"
           height={300}
         />
-        <Card>
+        <div>
           <h1 className="text-2xl font-bold">{data.title}</h1>
-        </Card>
-        <Card>
+        </div>
+        <div>
           <p className="text-lg">{data.body}</p>
-        </Card>
+        </div>
       </Card>
 
       {/* Comment Section */}
@@ -205,24 +207,26 @@ const Page = ({ params }: { params: { id: number } }) => {
       </div>
 
       {/* Comment submission form */}
-      <div className="mt-8">
-        <form onSubmit={handleCommentSubmit}>
-          <Textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Write a comment..."
-            fullWidth
-          />
-          <Button
-            type="submit"
-            size="lg"
-            color="secondary"
-            className="mt-4 w-full"
-          >
-            Submit Comment
-          </Button>
-        </form>
-      </div>
+      {data.user_id !== user_id && (
+        <div className="mt-8">
+          <form onSubmit={handleCommentSubmit}>
+            <Textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Write a comment..."
+              fullWidth
+            />
+            <Button
+              type="submit"
+              size="lg"
+              color="secondary"
+              className="mt-4 w-full"
+            >
+              Submit Comment
+            </Button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
