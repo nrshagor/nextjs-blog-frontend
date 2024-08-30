@@ -62,7 +62,7 @@ const BlogPost: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-5">
+    <div className="flex justify-center items-center  p-5">
       <div className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-6 text-center">Write a Blog</h1>
         <form onSubmit={handleSubmit} className="space-y-4">

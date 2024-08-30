@@ -2,7 +2,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { getCookie } from "cookie-handler-pro";
-import Link from "next/link"; // Import Link
+import Link from "next/link";
 import {
   Card,
   CardBody,
@@ -26,7 +26,7 @@ interface Post {
   id: number;
   title: string;
   body: string;
-  thumbnail: string; // Ensure the Post interface includes the thumbnail field
+  thumbnail: string;
   created_at: string;
   updated_at: string;
   user: User;
@@ -53,7 +53,7 @@ interface ApiResponse {
   meta: Meta;
 }
 
-const BlogPostView: React.FC = () => {
+const MyBlogPost: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [lastPage, setLastPage] = useState<number>(1);
@@ -65,14 +65,17 @@ const BlogPostView: React.FC = () => {
       try {
         const url = `${process.env.NEXT_PUBLIC_API_URL}/api/posts?page=${currentPage}`;
         const response = await axios.get<ApiResponse>(url);
-        setBlogPosts(response.data.data);
+        const userPosts = response.data.data.filter(
+          (post) => post.user.id === user_id
+        );
+        setBlogPosts(userPosts);
         setLastPage(response.data.meta.last_page);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, user_id]);
 
   const handleDelete = async (postId: number) => {
     const deleteUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}`;
@@ -99,7 +102,7 @@ const BlogPostView: React.FC = () => {
 
   return (
     <div>
-      <h1>Blog Posts</h1>
+      <h1>My Blog Posts</h1>
       <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {blogPosts.map((post) => (
           <Card className="max-w-[300px]" shadow="sm" key={post.id} isPressable>
@@ -110,7 +113,7 @@ const BlogPostView: React.FC = () => {
                 width="100%"
                 alt={post.title}
                 className="w-full object-cover h-[140px]"
-                src={post.thumbnail || "/default-image.jpg"} // Use the correct thumbnail URL
+                src={post.thumbnail || "/default-image.jpg"}
               />
               <CardBody>
                 <b>{post.title}</b>
@@ -125,12 +128,27 @@ const BlogPostView: React.FC = () => {
             <CardFooter className="text-small justify-between">
               <div className="flex w-100 justify-between space-x-2 items-center mt-2">
                 <Link
-                  className="bg-blue-100 hover:bg-blue-200 text-black font-bold py-2 px-4 rounded-medium"
+                  className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
                   href={`/blog/view/${post.id}`}
                   passHref
                 >
-                  SEE MORE
+                  View
                 </Link>
+                <div className="flex space-x-2">
+                  <Link
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                    href={`/blog/${post.id}`}
+                    passHref
+                  >
+                    Edit
+                  </Link>
+                  <Button
+                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => handleDelete(post.id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
               </div>
             </CardFooter>
           </Card>
@@ -174,4 +192,4 @@ const BlogPostView: React.FC = () => {
   );
 };
 
-export default BlogPostView;
+export default MyBlogPost;

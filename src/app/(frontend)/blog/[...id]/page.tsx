@@ -6,10 +6,13 @@ import { Input, Button, Textarea } from "@nextui-org/react";
 import Toast from "@/app/components/Toast";
 
 const Page = ({ params }: { params: { id: number } }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    body: string;
+    thumbnail?: string;
+  }>({
     title: "",
     body: "",
-    thumbnail: "",
   });
   const [errors, setErrors] = useState("");
   const [toastVisible, setToastVisible] = useState(false);
@@ -24,9 +27,9 @@ const Page = ({ params }: { params: { id: number } }) => {
         setFormData({
           title: response.data.title,
           body: response.data.body,
-          thumbnail: "",
+          thumbnail: "", // Keep thumbnail empty initially
         });
-        setExistingImage(response.data.thumbnail);
+        setExistingImage(response.data.thumbnail); // Set existing image
       } catch (error) {
         console.error("Error fetching post data:", error);
       }
@@ -56,7 +59,14 @@ const Page = ({ params }: { params: { id: number } }) => {
       const url = `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${params.id}`;
       const token = getCookie("token");
 
-      await axios.put(url, formData, {
+      // Only include the thumbnail field if a new image has been selected
+      const updatedFormData = {
+        title: formData.title,
+        body: formData.body,
+        ...(formData.thumbnail && { thumbnail: formData.thumbnail }),
+      };
+
+      await axios.patch(url, updatedFormData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -76,7 +86,6 @@ const Page = ({ params }: { params: { id: number } }) => {
       }
     }
   };
-
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-5">
       <div className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md">
@@ -109,7 +118,7 @@ const Page = ({ params }: { params: { id: number } }) => {
             className="w-full"
           />
 
-          {existingImage && (
+          {existingImage && !formData.thumbnail && (
             <div className="mt-4">
               <img
                 src={existingImage}

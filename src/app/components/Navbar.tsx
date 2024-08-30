@@ -21,7 +21,6 @@ const Navbars = () => {
   const path = usePathname();
 
   const menuItems = [
-    { name: "Blog", path: "/blog/view" },
     { name: "All Blog", path: "/blog" },
     { name: "Dashboard", path: "/dashboard" },
   ];
@@ -51,11 +50,6 @@ const Navbars = () => {
               <p className="font-bold text-inherit">Blog Pro</p>
             </Link>
           </NavbarBrand>
-          <NavbarItem>
-            <Link color="foreground" href="/blog/view">
-              Blog
-            </Link>
-          </NavbarItem>
           <NavbarItem isActive={path === "/blog"}>
             <Link href="/blog" aria-current="page" color="warning">
               All Blog

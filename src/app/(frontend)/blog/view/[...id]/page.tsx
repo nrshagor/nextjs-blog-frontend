@@ -1,18 +1,21 @@
 "use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { getCookie } from "cookie-handler-pro"; // Import to handle cookies
+import { getCookie } from "cookie-handler-pro";
+import { Card, Button, Textarea, Image } from "@nextui-org/react";
 
 const Page = ({ params }: { params: { id: number } }) => {
   const [data, setData] = useState({
     title: "",
     body: "",
+    thumbnail: "",
   });
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [editCommentId, setEditCommentId] = useState<number | null>(null);
   const [editCommentBody, setEditCommentBody] = useState("");
   const user_id = Number(getCookie("user_id"));
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -21,9 +24,9 @@ const Page = ({ params }: { params: { id: number } }) => {
         setData({
           title: response.data.title,
           body: response.data.body,
+          thumbnail: response.data.thumbnail, // Add thumbnail URL here
         });
 
-        // Fetch comments
         const commentsUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${params.id}/comments`;
         const token = getCookie("token");
         const commentsResponse = await axios.get(commentsUrl, {
@@ -58,7 +61,6 @@ const Page = ({ params }: { params: { id: number } }) => {
 
       setNewComment(""); // Clear the input field after submission
 
-      // Re-fetch comments after posting a new one
       const commentsResponse = await axios.get(commentUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -89,7 +91,6 @@ const Page = ({ params }: { params: { id: number } }) => {
       setEditCommentId(null); // Clear edit mode
       setEditCommentBody(""); // Clear the edit input
 
-      // Re-fetch comments after editing
       const commentsUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${params.id}/comments`;
       const commentsResponse = await axios.get(commentsUrl, {
         headers: {
@@ -113,7 +114,6 @@ const Page = ({ params }: { params: { id: number } }) => {
         },
       });
 
-      // Re-fetch comments after deleting
       const commentsUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${params.id}/comments`;
       const commentsResponse = await axios.get(commentsUrl, {
         headers: {
@@ -127,43 +127,75 @@ const Page = ({ params }: { params: { id: number } }) => {
   };
 
   return (
-    <div>
-      <p>{data.title}</p>
-      <p>{data.body}</p>
+    <div className="container mx-auto py-8 px-4">
+      <Card>
+        {/* Add Image at the top of the blog post */}
+        <Image
+          src={data.thumbnail}
+          alt={data.title}
+          className="w-full object-cover h-[300px] rounded-t-lg"
+          width="100%"
+          height={300}
+        />
+        <Card>
+          <h1 className="text-2xl font-bold">{data.title}</h1>
+        </Card>
+        <Card>
+          <p className="text-lg">{data.body}</p>
+        </Card>
+      </Card>
 
-      {/* Display comments */}
-      <div>
-        <h3>Comments </h3>
+      {/* Comment Section */}
+      <div className="mt-8">
+        <h3 className="text-xl font-semibold mb-4">Comments</h3>
         {comments.map((comment: any) => (
-          <div key={comment.id}>
+          <div
+            key={comment.id}
+            className="mb-4 p-4 bg-gray-100 rounded-lg shadow-sm"
+          >
             {editCommentId === comment.id ? (
-              <div>
-                <textarea
+              <div className="mb-2">
+                <Textarea
                   value={editCommentBody}
                   onChange={(e) => setEditCommentBody(e.target.value)}
+                  placeholder="Edit your comment"
+                  fullWidth
                 />
-                <button onClick={() => handleCommentEdit(comment.id)}>
-                  Save
-                </button>
-                <button onClick={() => setEditCommentId(null)}>Cancel</button>
+                <div className="flex justify-end mt-2">
+                  <Button
+                    size="sm"
+                    color="primary"
+                    onPress={() => handleCommentEdit(comment.id)}
+                    className="mr-2"
+                  >
+                    Save
+                  </Button>
+                  <Button size="sm" onPress={() => setEditCommentId(null)}>
+                    Cancel
+                  </Button>
+                </div>
               </div>
             ) : (
               <div>
                 <p>{comment.body}</p>
-                <small>by {comment.user.name}</small>
-                {comment.user.id === user_id && ( // Assuming user_id is stored in cookies
-                  <div>
-                    <button
-                      onClick={() => {
+                <small className="text-gray-500">by {comment.user.name}</small>
+                {comment.user.id === user_id && (
+                  <div className="flex justify-end space-x-2 mt-2">
+                    <Button
+                      size="sm"
+                      onPress={() => {
                         setEditCommentId(comment.id);
                         setEditCommentBody(comment.body);
                       }}
                     >
                       Edit
-                    </button>
-                    <button onClick={() => handleCommentDelete(comment.id)}>
+                    </Button>
+                    <Button
+                      size="sm"
+                      onPress={() => handleCommentDelete(comment.id)}
+                    >
                       Delete
-                    </button>
+                    </Button>
                   </div>
                 )}
               </div>
@@ -173,15 +205,24 @@ const Page = ({ params }: { params: { id: number } }) => {
       </div>
 
       {/* Comment submission form */}
-      <form onSubmit={handleCommentSubmit}>
-        <textarea
-          name="comment"
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Write a comment..."
-        />
-        <button type="submit">Submit Comment</button>
-      </form>
+      <div className="mt-8">
+        <form onSubmit={handleCommentSubmit}>
+          <Textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Write a comment..."
+            fullWidth
+          />
+          <Button
+            type="submit"
+            size="lg"
+            color="secondary"
+            className="mt-4 w-full"
+          >
+            Submit Comment
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };
