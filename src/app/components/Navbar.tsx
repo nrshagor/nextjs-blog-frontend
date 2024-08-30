@@ -20,10 +20,7 @@ const Navbars = () => {
   const token = getCookie("token");
   const path = usePathname();
 
-  const menuItems = [
-    // { name: "All Blog", path: "/blog" },
-    { name: "Dashboard", path: "/dashboard" },
-  ];
+  const menuItems = [{ name: "Dashboard", path: "/dashboard" }];
 
   useEffect(() => {
     console.log(path);
@@ -39,7 +36,7 @@ const Navbars = () => {
         <NavbarContent className="sm:hidden pr-3" justify="center">
           <NavbarBrand>
             <Link color="foreground" href="/">
-              <p className="font-bold text-inherit">Blog Pro</p>
+              <p className="font-bold text-inherit">Blogger Pro</p>
             </Link>
           </NavbarBrand>
         </NavbarContent>
@@ -47,14 +44,9 @@ const Navbars = () => {
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           <NavbarBrand>
             <Link color="foreground" href="/">
-              <p className="font-bold text-inherit">Blog Pro</p>
+              <p className="font-bold text-inherit">Blogger Pro</p>
             </Link>
           </NavbarBrand>
-          {/* <NavbarItem isActive={path === "/blog"}>
-            <Link href="/blog" aria-current="page" color="warning">
-              All Blog
-            </Link>
-          </NavbarItem> */}
         </NavbarContent>
 
         <NavbarContent justify="end">

@@ -98,8 +98,10 @@ const BlogPostView: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Blog Posts</h1>
+    <div className="py-2">
+      <h1 className="text-center text-4xl font-bold uppercase p-8">
+        Blog Posts
+      </h1>
       <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {blogPosts.map((post) => (
           <Card className="max-w-[300px]" shadow="sm" key={post.id} isPressable>

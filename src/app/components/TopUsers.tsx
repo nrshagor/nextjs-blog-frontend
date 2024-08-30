@@ -29,8 +29,10 @@ const TopUsers: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Top Users</h1>
+    <div className="pt-16">
+      <h1 className="text-center text-3xl font-bold uppercase p-8">
+        The top 5 users with the most posts
+      </h1>
       <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {topUsers.map((user) => (
           <Card className="max-w-[300px]" shadow="sm" key={user.id} isPressable>
