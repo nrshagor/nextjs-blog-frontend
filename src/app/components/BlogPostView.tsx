@@ -2,6 +2,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { getCookie } from "cookie-handler-pro";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  Image,
+  Pagination,
+  Button,
+} from "@nextui-org/react";
 
 // Define the types for the post and user data
 interface User {
@@ -49,6 +57,7 @@ const BlogPostView: React.FC = () => {
   const [lastPage, setLastPage] = useState<number>(1);
   const token = getCookie("token");
   const user_id = Number(getCookie("user_id"));
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -63,29 +72,17 @@ const BlogPostView: React.FC = () => {
     fetchData();
   }, [currentPage]);
 
-  const handleNextPage = () => {
-    if (currentPage < lastPage) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
-    }
-  };
-
   const handleEdit = (postId: number) => {
-    const editUrl = `/blog/${postId}`; // You can replace this with your actual edit page route
+    const editUrl = `/blog/${postId}`;
     window.location.href = editUrl;
   };
+
   const handleView = (postId: number) => {
-    const editUrl = `/blog/view/${postId}`; // You can replace this with your actual edit page route
-    window.location.href = editUrl;
+    const viewUrl = `/blog/view/${postId}`;
+    window.location.href = viewUrl;
   };
 
   const handleDelete = async (postId: number) => {
-    const token = getCookie("token");
     const deleteUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}`;
 
     try {
@@ -106,36 +103,77 @@ const BlogPostView: React.FC = () => {
   return (
     <div>
       <h1>Blog Posts</h1>
-      {blogPosts.map((post) => (
-        <div key={post.id}>
-          <h2>{post.title}</h2>
-          <p>{post.body}</p>
-          <small>by {post.user.name}</small>
-          <button onClick={() => handleView(post.id)}>View</button>
-          {post.user.id === user_id && (
-            <div>
-              <button onClick={() => handleEdit(post.id)}>Edit</button>
-              <button
-                onClick={() => handleDelete(post.id)}
-                style={{ color: "red" }}
-              >
-                Delete
-              </button>
-            </div>
-          )}
-        </div>
-      ))}
+      <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
+        {blogPosts.map((post) => (
+          <Card
+            shadow="sm"
+            key={post.id}
+            isPressable
+            onPress={() => handleView(post.id)}
+          >
+            <CardBody className="overflow-visible p-0">
+              <Image
+                shadow="sm"
+                radius="lg"
+                width="100%"
+                alt={post.title}
+                className="w-full object-cover h-[140px]"
+                src={post.user.email_verified_at || "/default-image.jpg"}
+              />
+            </CardBody>
+            <CardFooter className="text-small justify-between">
+              <b>{post.title}</b>
+              <p className="text-default-500">
+                {new Date(post.created_at).toLocaleDateString()}
+              </p>
+              {post.user.id === user_id && (
+                <div>
+                  <button onClick={() => handleEdit(post.id)}>Edit</button>
+                  <button
+                    onClick={() => handleDelete(post.id)}
+                    style={{ color: "red" }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
 
-      <div>
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <span>
-          Page {currentPage} of {lastPage}
-        </span>
-        <button onClick={handleNextPage} disabled={currentPage === lastPage}>
-          Next
-        </button>
+      <div className="flex flex-col gap-5 mt-5">
+        <p className="text-small text-default-500">
+          Selected Page: {currentPage}
+        </p>
+        <Pagination
+          total={lastPage}
+          color="secondary"
+          page={currentPage}
+          onChange={setCurrentPage}
+        />
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            variant="flat"
+            color="secondary"
+            onPress={() =>
+              setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))
+            }
+          >
+            Previous
+          </Button>
+          <Button
+            size="sm"
+            variant="flat"
+            color="secondary"
+            onPress={() =>
+              setCurrentPage((prev) => (prev < lastPage ? prev + 1 : prev))
+            }
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );
