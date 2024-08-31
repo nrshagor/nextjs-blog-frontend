@@ -55,7 +55,11 @@ const TopPosts: React.FC = () => {
                 width="100%"
                 alt={post.title}
                 className="w-full object-cover h-[140px]"
-                src={getImageUrl(post.thumbnail) || "/default-image.jpg"} // Use the constructed thumbnail URL
+                src={
+                  post.thumbnail != null
+                    ? getImageUrl(post.thumbnail)
+                    : "/default_image.png"
+                } // Use the constructed thumbnail URL
               />
               <CardBody>
                 <h3 className="font-semibold">{post.title}</h3>
