@@ -13,7 +13,7 @@ import React, { useEffect } from "react";
 import "../style/navbar.scss";
 import LogoutButton from "./LogoutButton";
 import { usePathname } from "next/navigation";
-import { getCookie } from "cookie-handler-pro";
+import { getCookie } from "../utils/cookies";
 import Link from "next/link";
 
 const Navbars = () => {
@@ -60,8 +60,7 @@ const Navbars = () => {
                   as={Link}
                   color="warning"
                   href="/register"
-                  variant="flat"
-                >
+                  variant="flat">
                   Sign Up
                 </Button>
               </NavbarItem>
@@ -82,8 +81,7 @@ const Navbars = () => {
               <Link
                 className="w-full"
                 color={item.name === "Dashboard" ? "warning" : "foreground"}
-                href={item.path}
-              >
+                href={item.path}>
                 {item.name}
               </Link>
             </NavbarMenuItem>

@@ -1,8 +1,9 @@
 "use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { getCookie } from "cookie-handler-pro";
-import { Card, Button, Textarea, Image } from "@nextui-org/react";
+import { getCookie } from "@/app/utils/cookies";
+// import Image from "next/image";
+import { Button, Card, Textarea, Image } from "@nextui-org/react";
 
 const Page = ({ params }: { params: { id: number } }) => {
   const [data, setData] = useState({
@@ -153,8 +154,7 @@ const Page = ({ params }: { params: { id: number } }) => {
         {comments.map((comment: any) => (
           <div
             key={comment.id}
-            className="mb-4 p-4 bg-gray-100 rounded-lg shadow-sm"
-          >
+            className="mb-4 p-4 bg-gray-100 rounded-lg shadow-sm">
             {editCommentId === comment.id ? (
               <div className="mb-2">
                 <Textarea
@@ -168,8 +168,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                     size="sm"
                     color="primary"
                     onPress={() => handleCommentEdit(comment.id)}
-                    className="mr-2"
-                  >
+                    className="mr-2">
                     Save
                   </Button>
                   <Button size="sm" onPress={() => setEditCommentId(null)}>
@@ -188,14 +187,12 @@ const Page = ({ params }: { params: { id: number } }) => {
                       onPress={() => {
                         setEditCommentId(comment.id);
                         setEditCommentBody(comment.body);
-                      }}
-                    >
+                      }}>
                       Edit
                     </Button>
                     <Button
                       size="sm"
-                      onPress={() => handleCommentDelete(comment.id)}
-                    >
+                      onPress={() => handleCommentDelete(comment.id)}>
                       Delete
                     </Button>
                   </div>
@@ -220,8 +217,7 @@ const Page = ({ params }: { params: { id: number } }) => {
               type="submit"
               size="lg"
               color="secondary"
-              className="mt-4 w-full"
-            >
+              className="mt-4 w-full">
               Submit Comment
             </Button>
           </form>

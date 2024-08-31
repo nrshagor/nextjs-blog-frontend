@@ -1,7 +1,7 @@
 "use client";
 import { auth } from "@/app/utils/jwt";
 import axios from "axios";
-import { getCookie } from "cookie-handler-pro";
+import { getCookie } from "../utils/cookies";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

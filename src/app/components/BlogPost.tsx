@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import { getCookie } from "cookie-handler-pro";
+import { getCookie } from "../utils/cookies";
 import React, { useState } from "react";
 import { Input, Button, Textarea } from "@nextui-org/react";
 import Toast from "./Toast"; // Import the Toast component

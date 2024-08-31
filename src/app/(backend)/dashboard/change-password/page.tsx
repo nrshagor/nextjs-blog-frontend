@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-import { getCookie } from "cookie-handler-pro";
+import { getCookie } from "@/app/utils/cookies";
 
 const ChangePasswordPage = () => {
   const [formData, setFormData] = useState({

@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { getCookie } from "cookie-handler-pro";
+import { getCookie } from "../utils/cookies";
 import Link from "next/link";
 import {
   Card,
@@ -130,22 +130,19 @@ const MyBlogPost: React.FC = () => {
                 <Link
                   className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
                   href={`/blog/view/${post.id}`}
-                  passHref
-                >
+                  passHref>
                   View
                 </Link>
                 <div className="flex space-x-2">
                   <Link
                     className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                     href={`/blog/${post.id}`}
-                    passHref
-                  >
+                    passHref>
                     Edit
                   </Link>
                   <Button
                     className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => handleDelete(post.id)}
-                  >
+                    onClick={() => handleDelete(post.id)}>
                     Delete
                   </Button>
                 </div>
@@ -172,8 +169,7 @@ const MyBlogPost: React.FC = () => {
             color="secondary"
             onPress={() =>
               setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))
-            }
-          >
+            }>
             Previous
           </Button>
           <Button
@@ -182,8 +178,7 @@ const MyBlogPost: React.FC = () => {
             color="secondary"
             onPress={() =>
               setCurrentPage((prev) => (prev < lastPage ? prev + 1 : prev))
-            }
-          >
+            }>
             Next
           </Button>
         </div>

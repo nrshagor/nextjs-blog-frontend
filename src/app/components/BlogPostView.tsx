@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { getCookie } from "cookie-handler-pro";
+import { getCookie } from "../utils/cookies";
 import Link from "next/link"; // Import Link
 import {
   Card,
@@ -129,8 +129,7 @@ const BlogPostView: React.FC = () => {
                 <Link
                   className="bg-blue-100 hover:bg-blue-200 text-black font-bold py-2 px-4 rounded-medium"
                   href={`/blog/view/${post.id}`}
-                  passHref
-                >
+                  passHref>
                   SEE MORE
                 </Link>
               </div>
@@ -156,8 +155,7 @@ const BlogPostView: React.FC = () => {
             color="secondary"
             onPress={() =>
               setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))
-            }
-          >
+            }>
             Previous
           </Button>
           <Button
@@ -166,8 +164,7 @@ const BlogPostView: React.FC = () => {
             color="secondary"
             onPress={() =>
               setCurrentPage((prev) => (prev < lastPage ? prev + 1 : prev))
-            }
-          >
+            }>
             Next
           </Button>
         </div>

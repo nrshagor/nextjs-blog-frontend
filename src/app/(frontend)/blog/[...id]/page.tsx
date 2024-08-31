@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import { getCookie } from "cookie-handler-pro";
+import { getCookie } from "@/app/utils/cookies";
 import React, { useState, useEffect } from "react";
 import { Input, Button, Textarea } from "@nextui-org/react";
 import Toast from "@/app/components/Toast";
@@ -130,8 +130,7 @@ const Page = ({ params }: { params: { id: number } }) => {
 
           <Button
             type="submit"
-            className="w-full bg-blue-500 text-white mt-4 hover:bg-blue-600"
-          >
+            className="w-full bg-blue-500 text-white mt-4 hover:bg-blue-600">
             Update Post
           </Button>
         </form>
