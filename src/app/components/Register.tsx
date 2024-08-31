@@ -122,8 +122,7 @@ const Register = () => {
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="name"
-            >
+              htmlFor="name">
               Name
             </label>
             <input
@@ -138,8 +137,7 @@ const Register = () => {
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="email"
-            >
+              htmlFor="email">
               Email
             </label>
             <input
@@ -154,8 +152,7 @@ const Register = () => {
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
+              htmlFor="password">
               Password
             </label>
             <input
@@ -171,8 +168,7 @@ const Register = () => {
           <div className="mb-6">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password_confirmation"
-            >
+              htmlFor="password_confirmation">
               Confirm Password
             </label>
             <input
@@ -186,14 +182,13 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
-          >
+            className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300">
             Sign Up
           </button>
         </form>
         <div className="mt-4 text-center">
           <Link href="/login" className="text-blue-500 hover:underline">
-            Already have an account? Login
+            <p>Already have an account? Login</p>
           </Link>
         </div>
       </div>

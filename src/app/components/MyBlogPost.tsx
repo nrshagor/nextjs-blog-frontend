@@ -58,6 +58,7 @@ const MyBlogPost: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [lastPage, setLastPage] = useState<number>(1);
   const token = getCookie("token");
+  console.log(token);
   const user_id = Number(getCookie("user_id"));
 
   useEffect(() => {
@@ -113,7 +114,7 @@ const MyBlogPost: React.FC = () => {
                 width="100%"
                 alt={post.title}
                 className="w-full object-cover h-[140px]"
-                src={post.thumbnail || "/default-image.jpg"}
+                src={post.thumbnail || "/default_image.png"}
               />
               <CardBody>
                 <b>{post.title}</b>

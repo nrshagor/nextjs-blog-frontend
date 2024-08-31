@@ -112,7 +112,7 @@ const BlogPostView: React.FC = () => {
                 width="100%"
                 alt={post.title}
                 className="w-full object-cover h-[140px]"
-                src={post.thumbnail || "/default-image.jpg"} // Use the correct thumbnail URL
+                src={post.thumbnail || "/default_image.png"} // Use the correct thumbnail URL
               />
               <CardBody>
                 <b>{post.title}</b>

@@ -10,7 +10,8 @@ export function getCookie(name: string): string | null {
   for (let i = 0; i < cookies.length; i++) {
     let cookie = cookies[i].trim();
     if (cookie.startsWith(nameEQ)) {
-      return cookie.substring(nameEQ.length);
+      const value = cookie.substring(nameEQ.length);
+      return decodeURIComponent(value); // Decode the value
     }
   }
   return null;
@@ -21,7 +22,9 @@ export function setCookie(name: string, value: string, days: number): void {
     const date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     const expires = `expires=${date.toUTCString()}`;
-    document.cookie = `${name}=${value}; ${expires}; path=/`;
+    document.cookie = `${name}=${encodeURIComponent(
+      value
+    )}; ${expires}; path=/`;
   }
 }
 
