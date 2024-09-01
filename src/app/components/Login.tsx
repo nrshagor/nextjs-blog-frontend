@@ -10,7 +10,7 @@ const Login = () => {
   const router = useRouter();
   const [email, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "email") setIdentifier(value);
@@ -18,6 +18,7 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       const loginPayload = {
         email,
@@ -56,6 +57,8 @@ const Login = () => {
       } else {
         console.error("Unexpected error:", error);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,9 +122,10 @@ const Login = () => {
         <div className="flex items-center justify-between">
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
           >
-            Login
+            {loading ? "Submitting..." : "Login"}
           </button>
         </div>
 

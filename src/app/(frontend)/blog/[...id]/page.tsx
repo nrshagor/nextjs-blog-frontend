@@ -17,7 +17,7 @@ const Page = ({ params }: { params: { id: number } }) => {
   const [errors, setErrors] = useState("");
   const [toastVisible, setToastVisible] = useState(false);
   const [existingImage, setExistingImage] = useState("");
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchPostData = async () => {
       try {
@@ -55,6 +55,7 @@ const Page = ({ params }: { params: { id: number } }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${params.id}`;
       const token = getCookie("token");
@@ -84,6 +85,8 @@ const Page = ({ params }: { params: { id: number } }) => {
       if (axios.isAxiosError(error)) {
         setErrors("Failed to update the post. Please try again.");
       }
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -129,9 +132,12 @@ const Page = ({ params }: { params: { id: number } }) => {
           )}
 
           <Button
+            color="secondary"
             type="submit"
-            className="w-full bg-blue-500 text-white mt-4 hover:bg-blue-600">
-            Update Post
+            className="w-full"
+            disabled={loading}
+          >
+            {loading ? "Submitting..." : "Update Post"}
           </Button>
         </form>
         <Toast

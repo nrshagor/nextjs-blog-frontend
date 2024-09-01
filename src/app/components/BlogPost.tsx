@@ -18,6 +18,7 @@ const BlogPost: React.FC = () => {
     thumbnail: null, // Initialize with null
   });
   const [errors, setErrors] = useState("");
+  const [loading, setLoading] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,12 +34,14 @@ const BlogPost: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const payload = new FormData();
       payload.append("title", formData.title);
       payload.append("body", formData.body);
+
       if (formData.thumbnail) {
-        payload.append("thumbnail", formData.thumbnail);
+        payload.append("thumbnail", formData.thumbnail); // Use the file directly
       }
 
       const url = `${process.env.NEXT_PUBLIC_API_URL}/api/posts`;
@@ -51,13 +54,15 @@ const BlogPost: React.FC = () => {
         },
       });
 
-      // Show success toast and clear form
       setToastVisible(true);
       setFormData({ title: "", body: "", thumbnail: null });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setErrors("The body field is required.");
+        console.error("Error details:", error.response?.data);
+        setErrors(error.response?.data.message || "An error occurred.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,9 +95,13 @@ const BlogPost: React.FC = () => {
             onChange={handleFileChange}
             className="w-full"
           />
-
-          <Button color="secondary" type="submit" className="w-full">
-            Submit
+          <Button
+            color="secondary"
+            type="submit"
+            className="w-full"
+            disabled={loading}
+          >
+            {loading ? "Submitting..." : "Submit"}
           </Button>
         </form>
       </div>
